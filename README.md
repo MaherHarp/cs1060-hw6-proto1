@@ -1,145 +1,51 @@
-# Calend Database Setup
+# Calend - PostgreSQL Database Demo
 
-This directory contains the PostgreSQL database setup for the Calend project - an AI-powered Harvard event aggregator.
+This Next.js app demonstrates the Calend project using PostgreSQL database.
 
-## Quick Start
+## 🚀 Quick Deploy to Vercel
 
-### 1. Start the Database
+### 1. Set up Neon PostgreSQL Database
+1. Go to [neon.tech](https://neon.tech)
+2. Sign up for free account
+3. Create new project: "calend-demo"
+4. Copy the connection string
 
-```bash
-# Start PostgreSQL container
-docker-compose up -d
-
-# Check if container is running
-docker-compose ps
-```
-
-### 2. Connect to the Database
-
-```bash
-# Connect using psql
-psql -h localhost -p 5432 -U calend -d calend
-
-# Or connect using Docker
-docker exec -it calend_postgres psql -U calend -d calend
-```
-
-### 3. Verify Schema
-
+### 2. Set up Database Schema
+Run this SQL in your Neon SQL editor:
 ```sql
--- List all tables
-\dt
-
--- Check users table
-SELECT * FROM users;
-
--- Check events table  
-SELECT * FROM events;
-
--- Check recommendations table
-SELECT * FROM recommendations;
+-- Copy the contents of schema.sql from the parent directory
+-- This will create the users, events, and recommendations tables
 ```
 
-## Database Schema
-
-### Tables
-
-- **users**: Student profiles with interests and skills
-- **events**: Aggregated events from various sources (MCS, Luma, etc.)
-- **recommendations**: AI-generated recommendations linking users to events
-
-### Key Features
-
-- Automatic schema initialization via `schema.sql`
-- Sample data for testing
-- Optimized indexes for daily digest queries
-- Foreign key constraints for data integrity
-
-## Useful Commands
-
-### Docker Commands
-
+### 3. Deploy to Vercel
 ```bash
-# Start database
-docker-compose up -d
+# Install Vercel CLI
+npm i -g vercel
 
-# Stop database
-docker-compose down
+# Deploy
+vercel
 
-# View logs
-docker-compose logs postgres
-
-# Restart database
-docker-compose restart postgres
-
-# Remove database (WARNING: deletes all data)
-docker-compose down -v
+# Add environment variable
+vercel env add DATABASE_URL
+# Paste your Neon connection string when prompted
 ```
 
-### PostgreSQL Commands
+### 4. Screenshot the Result
+Visit your deployed URL and screenshot the page showing:
+- ✅ PostgreSQL connection status
+- 📊 Database tables (users, events, recommendations)
+- 📈 Data counts
+- 🔗 Live database connection
 
-```bash
-# Connect to database
-psql -h localhost -p 5432 -U calend -d calend
+## 🎯 Perfect Screenshot Features
 
-# Run SQL file
-psql -h localhost -p 5432 -U calend -d calend -f schema.sql
+The deployed page will show:
+- **PostgreSQL version** (e.g., "PostgreSQL 16.10")
+- **Custom Calend tables** (users, events, recommendations)
+- **Live data counts** proving the database is working
+- **Real-time connection status**
 
-# Backup database
-pg_dump -h localhost -p 5432 -U calend calend > backup.sql
+## 📱 Demo URL
+Once deployed, your URL will be: `https://calend-app-xxx.vercel.app`
 
-# Restore database
-psql -h localhost -p 5432 -U calend calend < backup.sql
-```
-
-### Common Queries
-
-```sql
--- Get daily recommendations for a user
-SELECT u.name, e.title, e.starts_at, r.score 
-FROM recommendations r
-JOIN users u ON r.user_id = u.id
-JOIN events e ON r.event_id = e.id
-WHERE u.id = 1 AND r.recommended_on = CURRENT_DATE
-ORDER BY r.score DESC;
-
--- Get upcoming events
-SELECT title, starts_at, location, source
-FROM events 
-WHERE starts_at > NOW()
-ORDER BY starts_at;
-
--- Get user preferences
-SELECT name, interests, skills 
-FROM users 
-WHERE email = 'john.doe@college.harvard.edu';
-```
-
-## Connection Details
-
-- **Host**: localhost
-- **Port**: 5432
-- **Database**: calend
-- **Username**: calend
-- **Password**: calend
-
-## Troubleshooting
-
-### Container won't start
-```bash
-# Check if port 5432 is already in use
-lsof -i :5432
-
-# Remove existing container and restart
-docker-compose down -v
-docker-compose up -d
-```
-
-### Connection refused
-```bash
-# Wait for database to fully initialize (30-60 seconds)
-docker-compose logs postgres
-
-# Check container status
-docker-compose ps
-```
+This clearly demonstrates PostgreSQL usage for your Calend project!
