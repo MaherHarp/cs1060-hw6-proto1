@@ -13,7 +13,22 @@ interface DatabaseInfo {
       events: number;
       recommendations: number;
     };
+    schema?: {
+      users: string;
+      events: string;
+      recommendations: string;
+    };
     status?: string;
+  };
+  demo?: {
+    title: string;
+    description: string;
+    features: string[];
+    sampleData: {
+      users: number;
+      events: number;
+      recommendations: number;
+    };
   };
   instructions?: {
     setup: string;
@@ -67,51 +82,129 @@ export default function Home() {
           </p>
         </div>
 
-        {dbInfo?.success && dbInfo.database?.configured ? (
+        {dbInfo?.success ? (
           <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-green-600 mb-4 flex items-center">
-                ✅ PostgreSQL Connection Active
-              </h2>
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <h3 className="font-semibold text-gray-800 mb-2">Database Version:</h3>
-                <code className="text-sm bg-white p-2 rounded border block">
-                  {dbInfo.database?.version}
-                </code>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div className="bg-blue-50 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-800 mb-3">📊 Database Tables</h3>
-                <ul className="space-y-2">
-                  {dbInfo.database?.tables?.map((table, index) => (
-                    <li key={index} className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                      <code className="bg-white px-2 py-1 rounded text-sm">{table}</code>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="bg-green-50 rounded-lg p-4">
-                <h3 className="font-semibold text-green-800 mb-3">📈 Data Counts</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Users:</span>
-                    <span className="font-semibold">{dbInfo.database?.counts?.users}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Events:</span>
-                    <span className="font-semibold">{dbInfo.database?.counts?.events}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Recommendations:</span>
-                    <span className="font-semibold">{dbInfo.database?.counts?.recommendations}</span>
+            {dbInfo.database?.configured ? (
+              // Live database connection
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-green-600 mb-4 flex items-center">
+                    ✅ PostgreSQL Connection Active
+                  </h2>
+                  <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-gray-800 mb-2">Database Version:</h3>
+                    <code className="text-sm bg-white p-2 rounded border block">
+                      {dbInfo.database?.version}
+                    </code>
                   </div>
                 </div>
-              </div>
-            </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-blue-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-blue-800 mb-3">📊 Database Tables</h3>
+                    <ul className="space-y-2">
+                      {dbInfo.database?.tables?.map((table, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <code className="bg-white px-2 py-1 rounded text-sm">{table}</code>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="bg-green-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-green-800 mb-3">📈 Data Counts</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Users:</span>
+                        <span className="font-semibold">{dbInfo.database?.counts?.users}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Events:</span>
+                        <span className="font-semibold">{dbInfo.database?.counts?.events}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Recommendations:</span>
+                        <span className="font-semibold">{dbInfo.database?.counts?.recommendations}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              // Schema demonstration
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-blue-600 mb-4 flex items-center">
+                    🗄️ PostgreSQL Database Schema
+                  </h2>
+                  <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-blue-800 mb-2">Database Version:</h3>
+                    <code className="text-sm bg-white p-2 rounded border block">
+                      {dbInfo.database?.version}
+                    </code>
+                    <p className="text-blue-700 text-sm mt-2">{dbInfo.database?.status}</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-blue-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-blue-800 mb-3">📊 Database Tables</h3>
+                    <ul className="space-y-2">
+                      {dbInfo.database?.tables?.map((table, index) => (
+                        <li key={index} className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <code className="bg-white px-2 py-1 rounded text-sm">{table}</code>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="bg-green-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-green-800 mb-3">📈 Sample Data</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Users:</span>
+                        <span className="font-semibold">{dbInfo.demo?.sampleData.users}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Events:</span>
+                        <span className="font-semibold">{dbInfo.demo?.sampleData.events}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Recommendations:</span>
+                        <span className="font-semibold">{dbInfo.demo?.sampleData.recommendations}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {dbInfo.demo && (
+                  <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 className="font-semibold text-gray-800 mb-3">{dbInfo.demo.title}</h3>
+                    <p className="text-gray-700 mb-4">{dbInfo.demo.description}</p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold text-gray-800 mb-2">Schema Features:</h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {dbInfo.demo.features.map((feature, index) => (
+                            <li key={index}>• {feature}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800 mb-2">Table Structure:</h4>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          <div><strong>Users:</strong> {dbInfo.database?.schema?.users}</div>
+                          <div><strong>Events:</strong> {dbInfo.database?.schema?.events}</div>
+                          <div><strong>Recommendations:</strong> {dbInfo.database?.schema?.recommendations}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
             <div className="text-center text-sm text-gray-500">
               Last updated: {new Date(dbInfo.timestamp).toLocaleString()}
