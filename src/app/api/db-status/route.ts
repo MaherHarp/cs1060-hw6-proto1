@@ -27,7 +27,7 @@ export async function GET() {
     }
 
     // If DATABASE_URL exists, try to connect
-    const { Pool } = require('pg');
+    const { Pool } = await import('pg');
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
